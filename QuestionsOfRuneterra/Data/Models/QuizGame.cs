@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuestionsOfRuneterra.Data.Models
 {
@@ -8,14 +8,18 @@ namespace QuestionsOfRuneterra.Data.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
+        [Required]
         public IEnumerable<QuizGameSession> Sessions { get; set; }
 
+        [Required]
         public DateTime StartedOn { get; set; }
 
         public DateTime FinishedOn { get; set; }
 
+        [Required]
         public string PlayerId { get; set; }
 
-        public IdentityUser Player { get; set; }
+        [Required]
+        public ApplicationUser Player { get; set; }
     }
 }

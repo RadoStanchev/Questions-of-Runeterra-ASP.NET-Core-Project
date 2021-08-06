@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuestionsOfRuneterra.Data.Models
 {
@@ -6,14 +7,19 @@ namespace QuestionsOfRuneterra.Data.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
+        [Required]
         public string QuestionId { get; set; }
 
+        [Required]
         public Question Question { get; set; }
 
-        public string AnswerId { get; set; }
+        [Required]
+        public string SelectedAnswerId { get; set; }
 
-        public Answer Answer { get; set; }
+        [Required]
+        public Answer SelectedAnswer { get; set; }
 
+        [Required]
         public DateTime CreatedOn { get; set; }
 
     }
