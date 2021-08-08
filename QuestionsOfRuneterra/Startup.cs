@@ -9,8 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using QuestionsOfRuneterra.Data;
 using QuestionsOfRuneterra.Data.Models;
-using QuestionsOfRuneterra.Infrastructure;
 using QuestionsOfRuneterra.Infrastructure.Extensions;
+using QuestionsOfRuneterra.Services;
+using QuestionsOfRuneterra.Services.Interfaces;
+using static QuestionsOfRuneterra.Data.DataConstants.ApplicationUser;
 
 namespace QuestionsOfRuneterra
 {
@@ -37,16 +39,24 @@ namespace QuestionsOfRuneterra
                    options.Password.RequireLowercase = false;
                    options.Password.RequireNonAlphanumeric = false;
                    options.Password.RequireUppercase = false;
+                   options.Password.RequiredLength = PasswordMinLength;
                })
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LogoutPath = $"/User/Logout";
+            });
 
             services.AddAutoMapper(typeof(Startup));
 
             services.AddRazorPages();
 
             services.AddMemoryCache();
+
+            services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
             services.AddControllersWithViews(options =>
             {
