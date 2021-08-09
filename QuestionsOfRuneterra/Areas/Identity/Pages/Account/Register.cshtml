@@ -45,9 +45,9 @@
                 <p>Select your Avatar</p>
                 @foreach (var item in @Model.Input.AllProfileImagePaths)
                 {
-                    <label asp-for="Input.ProfileImagePath">
-                        <input asp-for="Input.ProfileImagePath" type="radio" value="@item" />
-                        <img src="@item" class="avatar-icon" alt="" />
+                    <label>
+                        <input asp-for="Input.ProfileImagePath" type="radio" value="@item" name="AvatarGroup" />
+                        <img src="@item" class="avatar-icon" width="75" height="75" alts="" />
                     </label>
                 }
             </div>

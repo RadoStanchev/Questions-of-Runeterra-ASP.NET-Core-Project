@@ -18,7 +18,12 @@ namespace QuestionsOfRuneterra.Services
 
         public IEnumerable<string> GetProfileImagePaths()
         {
-            return Directory.GetFiles(Directory.GetCurrentDirectory() + "\\wwwroot\\images\\icons", "*.*", SearchOption.AllDirectories).ToList();
+            return Directory
+                .GetFiles(Directory.GetCurrentDirectory() + "\\wwwroot\\images\\icons", "*.*", SearchOption.AllDirectories)
+                .Select(s => s.Replace(Directory.GetCurrentDirectory(), string.Empty))
+                .Select(s => s.Replace("\\wwwroot", string.Empty))
+                .Select(s => s.Replace("\\", "/"))
+                .ToList();
         }
 
         public bool isUsernameUnique(string username)
