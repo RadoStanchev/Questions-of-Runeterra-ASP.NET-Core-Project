@@ -21,4 +21,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Rooms\" />
+    <Folder Include="Views\Questions\" />
+    <Folder Include="wwwroot\images\backgrounds\" />
+  </ItemGroup>
+
 </Project>

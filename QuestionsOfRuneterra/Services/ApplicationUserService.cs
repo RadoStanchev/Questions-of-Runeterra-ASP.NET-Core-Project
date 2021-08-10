@@ -4,6 +4,7 @@ using QuestionsOfRuneterra.Services.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static QuestionsOfRuneterra.WebConstants;
 
 namespace QuestionsOfRuneterra.Services
 {
@@ -19,9 +20,9 @@ namespace QuestionsOfRuneterra.Services
         public IEnumerable<string> GetProfileImagePaths()
         {
             return Directory
-                .GetFiles(Directory.GetCurrentDirectory() + "\\wwwroot\\images\\icons", "*.*", SearchOption.AllDirectories)
+                .GetFiles(Directory.GetCurrentDirectory() + wwwrootPath + imagesPath + iconsPath, "*.*", SearchOption.AllDirectories)
                 .Select(s => s.Replace(Directory.GetCurrentDirectory(), string.Empty))
-                .Select(s => s.Replace("\\wwwroot", string.Empty))
+                .Select(s => s.Replace(wwwrootPath, string.Empty))
                 .Select(s => s.Replace("\\", "/"))
                 .ToList();
         }
