@@ -57,6 +57,8 @@ namespace QuestionsOfRuneterra
             services.AddMemoryCache();
 
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
+            services.AddTransient<IQuestionService, QuestionService>();
+            services.AddTransient<IAnswerService, AnswerService>();
 
             services.AddControllersWithViews(options =>
             {
