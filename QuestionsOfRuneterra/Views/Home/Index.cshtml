@@ -1,5 +1,4 @@
-﻿@using static QuestionsOfRuneterra.WebConstants
-@{
+﻿@{
     ViewBag.Title = "Welcome";
 }
 
@@ -19,7 +18,7 @@
                 <img class="center-block w-75" src="@firstBackground" alt="Heimerdinger ,Professor from Bandle City">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Do you want to beat the hardest questions?</h5>
-                    <h5><a class="btn btn-primary" asp-controller="QuizGame" asp-action="@nameof(QuizGameController.Start)">Let's start</a></h5>
+                    <h5><a class="btn btn-primary" asp-controller="QuizGames" asp-action="@nameof(QuizGamesController.Start)">Let's start</a></h5>
                 </div>
             </div>
             <div class="carousel-item">

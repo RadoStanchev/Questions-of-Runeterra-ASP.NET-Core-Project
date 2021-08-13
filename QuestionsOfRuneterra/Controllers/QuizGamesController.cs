@@ -2,7 +2,7 @@
 
 namespace QuestionsOfRuneterra.Controllers
 {
-    public class QuizGameController : Controller
+    public class QuizGamesController : Controller
     {
         public IActionResult History()
         {

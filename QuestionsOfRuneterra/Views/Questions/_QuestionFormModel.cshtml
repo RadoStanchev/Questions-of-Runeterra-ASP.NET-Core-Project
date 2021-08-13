@@ -1,0 +1,32 @@
+﻿@model QuestionFormModel
+@{
+    string checkImageWebPath = $"{imagesPath}/114282010-check-mark-symbol-check-box-icon.jpg".Replace("\\", "/");
+}
+
+<h4 class="text-center">@ViewBag.Title</h4>
+<form class="offset-1" id="form" method="post">
+    <div class="form-group">
+        <div class="form-group ">
+            <label for="exampleFormControlTextarea1">Question</label>
+            <textarea asp-for="@Model.Content" class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Write your Question here"></textarea>
+            <span asp-validation-for="@Model.Content"></span>
+        </div>
+    </div>
+    @*<div id="partial">
+            <partial name="_AnswerInput" />
+        </div>
+        <div id="addAnswerPartial"></div>*@
+    <button type="submit" class="btn btn-primary">Let's add some answers to it! <span class="carousel-control-next-icon" aria-hidden="true"></span></button>
+</form>
+
+@*<script>
+        function func(e) {
+            e.preventDefault();
+            let partial = document.getElementById('partial').cloneNode(true);
+            partial.addEventListener('input', e => func(e))
+            document.getElementById('addAnswerPartial').appendChild(partial);
+            e.removeEventListener('input', e => func(e), false);
+        }
+
+        document.getElementsByClassName('answerInput')[0].addEventListener('input', e => func(e))
+    </script>*@

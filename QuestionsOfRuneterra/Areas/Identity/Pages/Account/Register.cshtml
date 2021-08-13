@@ -1,12 +1,14 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewBag.Title = "Create a new account";
 }
 
 
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="register-container">
+        <div class="mb-5"></div>
+        <h4>@ViewBag.Title</h4>
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>Create a new account.</h4>
             <hr />

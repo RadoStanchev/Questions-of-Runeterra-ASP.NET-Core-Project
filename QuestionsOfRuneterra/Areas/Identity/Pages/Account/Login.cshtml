@@ -2,11 +2,12 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewBag.Title = "Log in";
 }
 
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="login-container">
+        <h4>@ViewBag.Title</h4>
         <img class="profile-avatar" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
         <form id="account" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
