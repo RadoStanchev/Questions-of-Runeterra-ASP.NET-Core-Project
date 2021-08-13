@@ -4,6 +4,7 @@
     {
         public class Answer
         {
+            public const int ContentMinLength = 5;
             public const int ContentMaxLength = 20;
         }
 
@@ -22,11 +23,13 @@
 
         public class Message
         {
+            public const int ContentMinLength = 5;
             public const int ContentMaxLength = 300;
         }
 
         public class Question
         {
+            public const int ContentMinLength = 10;
             public const int ContentMaxLength = 250;
         }
 

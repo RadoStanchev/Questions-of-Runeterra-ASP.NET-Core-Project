@@ -25,6 +25,10 @@ namespace QuestionsOfRuneterra.Data.Models
         [Required]
         public ApplicationUser Creator { get; set; }
 
+        public bool IsFeatured { get; set; }
+
+        public bool IsPublic { get; set; }
+
         [Required]
         public IEnumerable<QuizGameSession> Sessions { get; set; }
     }
