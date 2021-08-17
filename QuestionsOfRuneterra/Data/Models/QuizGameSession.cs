@@ -7,16 +7,18 @@ namespace QuestionsOfRuneterra.Data.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
+        public string QuizGameId { get; set; }
+
+        public QuizGame QuizGame { get; set; }
+
         [Required]
         public string QuestionId { get; set; }
 
         [Required]
         public Question Question { get; set; }
 
-        [Required]
         public string SelectedAnswerId { get; set; }
 
-        [Required]
         public Answer SelectedAnswer { get; set; }
 
         [Required]

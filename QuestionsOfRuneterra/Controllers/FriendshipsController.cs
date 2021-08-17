@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using QuestionsOfRuneterra.Data.Models;
 
 namespace QuestionsOfRuneterra.Controllers
 {

@@ -16,6 +16,8 @@ namespace QuestionsOfRuneterra.Data.Models
         [Required]
         public string OwnerId { get; set; }
 
+        public bool IsPublic { get; set; }
+
         [Required]
         public ApplicationUser Owner { get; set; }
 

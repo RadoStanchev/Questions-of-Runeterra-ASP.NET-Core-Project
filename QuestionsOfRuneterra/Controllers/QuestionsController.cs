@@ -48,7 +48,7 @@ namespace QuestionsOfRuneterra.Controllers
 
         public IActionResult Details([FromQuery] QuestionServiceModel question)
         {
-            if (questionService.isOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
+            if (questionService.IsOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }
@@ -102,7 +102,7 @@ namespace QuestionsOfRuneterra.Controllers
 
         public IActionResult Delete(string id)
         {
-            if (questionService.isOwnedBy(id, User.Id()) == false && User.IsAdmin() == false)
+            if (questionService.IsOwnedBy(id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }

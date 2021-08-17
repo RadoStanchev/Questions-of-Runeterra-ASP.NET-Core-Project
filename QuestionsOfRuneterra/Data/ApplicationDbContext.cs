@@ -49,6 +49,9 @@ namespace QuestionsOfRuneterra.Data
                 .WithMany(q => q.Sessions)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Friendship>()
+                .HasKey(fs => new { fs.FirstFriendId, fs.SecondFriendId });
+
             base.OnModelCreating(builder);
         }
     }

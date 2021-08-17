@@ -8,7 +8,12 @@ namespace QuestionsOfRuneterra.Controllers
 {
     public class RoomsController : Controller
     {
-        public IActionResult Index()
+        public IActionResult All()
+        {
+            return View();
+        }
+
+        public IActionResult Room(string id)
         {
             return View();
         }

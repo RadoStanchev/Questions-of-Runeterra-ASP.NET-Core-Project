@@ -12,6 +12,7 @@ using QuestionsOfRuneterra.Data.Models;
 using QuestionsOfRuneterra.Infrastructure.Extensions;
 using QuestionsOfRuneterra.Services;
 using QuestionsOfRuneterra.Services.Interfaces;
+using System;
 using static QuestionsOfRuneterra.Data.DataConstants.ApplicationUser;
 
 namespace QuestionsOfRuneterra
@@ -55,7 +56,8 @@ namespace QuestionsOfRuneterra
 
             services.AddMemoryCache();
 
-            services.AddSingleton<IRoomService, RoomService>();
+            services.AddTransient<IRoomService, RoomService>();
+            services.AddTransient<Random, Random>();
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswerService, AnswerService>();

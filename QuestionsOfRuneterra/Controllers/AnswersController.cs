@@ -57,7 +57,7 @@ namespace QuestionsOfRuneterra.Controllers
 
         public IActionResult Delete([FromQuery] AnswerServiceModel answer)
         {
-            if (answerService.isOwnedBy(answer.Id, User.Id()) == false && User.IsAdmin() == false)
+            if (answerService.IsOwnedBy(answer.Id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }

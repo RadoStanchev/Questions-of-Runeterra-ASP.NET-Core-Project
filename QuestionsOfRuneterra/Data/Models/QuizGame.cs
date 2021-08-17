@@ -21,5 +21,7 @@ namespace QuestionsOfRuneterra.Data.Models
 
         [Required]
         public ApplicationUser Player { get; set; }
+
+        public int Points { get; set; }
     }
 }
