@@ -19,21 +19,6 @@ namespace QuestionsOfRuneterra.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ApplicationUserFriendship", b =>
-                {
-                    b.Property<string>("FriendsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FriendshipsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FriendsId", "FriendshipsId");
-
-                    b.HasIndex("FriendshipsId");
-
-                    b.ToTable("ApplicationUserFriendship");
-                });
-
             modelBuilder.Entity("ApplicationUserRoom", b =>
                 {
                     b.Property<string>("JoinedRoomsId")
@@ -295,14 +280,22 @@ namespace QuestionsOfRuneterra.Data.Migrations
 
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.Friendship", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("FirstFriendId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SecondFriendId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoomId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("FirstFriendId", "SecondFriendId");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("RoomId");
 
@@ -445,21 +438,6 @@ namespace QuestionsOfRuneterra.Data.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("ApplicationUserFriendship", b =>
-                {
-                    b.HasOne("QuestionsOfRuneterra.Data.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("FriendsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QuestionsOfRuneterra.Data.Models.Friendship", null)
-                        .WithMany()
-                        .HasForeignKey("FriendshipsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ApplicationUserRoom", b =>
                 {
                     b.HasOne("QuestionsOfRuneterra.Data.Models.Room", null)
@@ -547,6 +525,10 @@ namespace QuestionsOfRuneterra.Data.Migrations
 
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.Friendship", b =>
                 {
+                    b.HasOne("QuestionsOfRuneterra.Data.Models.ApplicationUser", null)
+                        .WithMany("Friendships")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("QuestionsOfRuneterra.Data.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
@@ -633,6 +615,8 @@ namespace QuestionsOfRuneterra.Data.Migrations
 
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Friendships");
+
                     b.Navigation("Messages");
 
                     b.Navigation("OwnedRooms");

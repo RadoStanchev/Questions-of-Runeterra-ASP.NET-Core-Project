@@ -1,4 +1,5 @@
 ﻿using CarRentingSystem.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestionsOfRuneterra.Infrastructure.Extensions;
 using QuestionsOfRuneterra.Models.Answers;
@@ -7,7 +8,8 @@ using QuestionsOfRuneterra.Services.Interfaces;
 
 namespace QuestionsOfRuneterra.Controllers
 {
-    public class QuestionsController : Controller
+    [Authorize]
+    public class QuestionsController : MyController
     {
         private readonly IQuestionService questionService;
 
@@ -27,7 +29,7 @@ namespace QuestionsOfRuneterra.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(QuestionFormModel question)
+        public IActionResult Add(QuestionServiceModel question)
         {
             if (!ModelState.IsValid)
             {
@@ -44,27 +46,36 @@ namespace QuestionsOfRuneterra.Controllers
         }
 
 
-        public IActionResult Details([FromQuery] QuestionFormModel question)
+        public IActionResult Details([FromQuery] QuestionServiceModel question)
         {
             if (questionService.isOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }
 
-            return View();
+            return View(question);
         }
 
-        public IActionResult Edit()
-        {
-            
-            return View();
+        public IActionResult Edit(string id)
+        { 
+            return View(questionService.Question(id));
         }
 
-        public IActionResult Save([FromQuery] QuestionFormModel question)
+        public IActionResult Save([FromQuery] QuestionServiceModel question)
         {
-            if(questionService.isOwnedBy(question.Id, User.Id()) == false)
+            if(questionService.isOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
+            }
+
+            if (questionService.WrongAnswersCount(question.Id) < 3)
+            {
+                ModelState.AddModelError(nameof(question.Answers), "Wrong answers must be at least 3");
+            }
+
+            if (questionService.RightAnswersCount(question.Id) < 1)
+            {
+                ModelState.AddModelError(nameof(question.Answers), "Right answers must be at least 1");
             }
 
             questionService.Save(question.Id);
@@ -73,26 +84,31 @@ namespace QuestionsOfRuneterra.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromQuery] QuestionFormModel question)
+        public IActionResult Edit([FromForm] QuestionServiceModel question)
         {
-            if (questionService.isOwnedBy(question.Id, User.Id()) == false)
+            if (questionService.isOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }
 
             questionService.Edit(question.Id, User.Id());
-            return RedirectToAction(nameof(AnswersController.Edit), typeof(AnswersController).GetControllerName());
+            var answerQuery = new AnswerQueryModel
+            {
+                QuestionId = question.Id
+            };
+
+            return RedirectToAction(nameof(AnswersController.Edit), typeof(AnswersController).GetControllerName(), answerQuery);
         }
 
-        public IActionResult Delete()
+        public IActionResult Delete(string id)
         {
-            return View();
-        }
+            if (questionService.isOwnedBy(id, User.Id()) == false && User.IsAdmin() == false)
+            {
+                return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
+            }
 
-        private void SetOrderNumber()
-        {
-            TempData["orderNumber"] = 0;
-            TempData.Keep("orderNumber");
+            questionService.Delete(id);
+            return RedirectToAction(nameof(QuestionsController.All));
         }
     }
 }

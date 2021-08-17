@@ -60,6 +60,7 @@ namespace QuestionsOfRuneterra.Infrastructure.Extensions
                         UserName = adminEmail,
                         FirstName = "Admin",
                         LastName = "Admin",
+                        ProfileImagePath = "D:\\OneDrive - Software University (SoftUni)\\C#_projects\\C# Web Projects\\Questions-of-Runeterra-ASP.NET-Core-Project\\QuestionsOfRuneterra\\wwwroot\\images\\admin\\yönetici-png-8.png"
                     };
 
                     await userManager.CreateAsync(user, adminPassword);

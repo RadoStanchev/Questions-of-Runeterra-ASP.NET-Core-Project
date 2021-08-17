@@ -39,6 +39,21 @@ namespace QuestionsOfRuneterra.Services
             return answer.Id;
         }
 
+        public bool Delete(string answerId)
+        {
+            var answer = data.Answers.FirstOrDefault(a => a.Id == answerId);
+
+            if (answer == null)
+            {
+                return false;
+            }
+
+            data.Answers.Remove(answer);
+            data.SaveChanges();
+
+            return true;
+        }
+
         public bool Edit(string answerId, string content, bool isRight)
         {
             var answer = data.Answers.FirstOrDefault(a => a.Id == answerId);
@@ -60,6 +75,11 @@ namespace QuestionsOfRuneterra.Services
             return data.Answers.FirstOrDefault(a => a.Id == answerId).QuestionId == questionId;
         }
 
+        public bool isOwnedBy(string answerId, string userId)
+        {
+            return data.Answers.FirstOrDefault(a => a.Id == answerId).CreatorId == userId;
+        }
+
         public AnswerServiceModel NextAnswer(string questionId, int orderNumber)
         {
             return PreviousAnswer(questionId, orderNumber + 1);
@@ -74,6 +94,7 @@ namespace QuestionsOfRuneterra.Services
                         .OrderBy(a => a.CreatedOn)
                         .Select(a => new AnswerServiceModel
                         {
+                            Id = a.Id,
                             Content = a.Content,
                             IsRight = a.IsRight,
                             QuestionId = questionId,

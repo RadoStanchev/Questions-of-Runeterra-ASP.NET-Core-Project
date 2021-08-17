@@ -33,7 +33,7 @@ namespace QuestionsOfRuneterra
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
-               .AddIdentity<ApplicationUser, IdentityRole>(options =>
+               .AddDefaultIdentity<ApplicationUser>(options =>
                {
                    options.Password.RequireDigit = false;
                    options.Password.RequireLowercase = false;
@@ -42,8 +42,7 @@ namespace QuestionsOfRuneterra
                    options.Password.RequiredLength = PasswordMinLength;
                })
                .AddRoles<IdentityRole>()
-               .AddEntityFrameworkStores<ApplicationDbContext>()
-               .AddDefaultTokenProviders();
+               .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -56,9 +55,11 @@ namespace QuestionsOfRuneterra
 
             services.AddMemoryCache();
 
+            services.AddSingleton<IRoomService, RoomService>();
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswerService, AnswerService>();
+            services.AddTransient<IFriendshipService, FriendshipService>();
 
             services.AddControllersWithViews(options =>
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using QuestionsOfRuneterra.Models.Friendships;
+using System.Collections.Generic;
 
 namespace QuestionsOfRuneterra.Services.Interfaces
 {
@@ -6,6 +7,10 @@ namespace QuestionsOfRuneterra.Services.Interfaces
     {
         IEnumerable<string> GetProfileImagePaths();
 
-        bool isUsernameUnique(string username);
+        bool IsUsernameUnique(string username);
+
+        string AdminId();
+
+        string UserName(string userId);
     }
 }

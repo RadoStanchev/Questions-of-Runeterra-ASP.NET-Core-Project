@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CarRentingSystem.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using QuestionsOfRuneterra.Infrastructure.Extensions;
 using QuestionsOfRuneterra.Models.Answers;
+using QuestionsOfRuneterra.Models.Questions;
 using QuestionsOfRuneterra.Services.Interfaces;
 using static QuestionsOfRuneterra.WebConstants;
 
@@ -29,6 +31,11 @@ namespace QuestionsOfRuneterra.Controllers
 
         public IActionResult Edit([FromQuery] AnswerQueryModel query)
         {
+            if (OrderNumber() == answerService.TotalAnswersToQuestion(query.QuestionId))
+            {
+                return RedirectToAction(nameof(AnswersController.Add), query);
+            }
+
             DecreaseOrderNumber();
             query.CurrentAnswer = answerService.PreviousAnswer(query.QuestionId, OrderNumber());
             query.PreviousAnswer = OrderNumber()-1 < 0 ? null : answerService.PreviousAnswer(query.QuestionId, OrderNumber()-1);
@@ -48,6 +55,22 @@ namespace QuestionsOfRuneterra.Controllers
             return this.View(query);
         }
 
+        public IActionResult Delete([FromQuery] AnswerServiceModel answer)
+        {
+            if (answerService.isOwnedBy(answer.Id, User.Id()) == false && User.IsAdmin() == false)
+            {
+                return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
+            }
+            answerService.Delete(answer.Id);
+
+            var query = new QuestionServiceModel
+            {
+                Id = answer.QuestionId
+            };
+
+            return this.RedirectToAction(nameof(QuestionsController.Details), typeof(QuestionsController).GetControllerName(), query);
+        }
+
         private AnswerQueryModel Redaction(AnswerServiceModel answer, RedactionType type, bool increaseOrderNumber)
         {
             AnswerQueryModel query;
@@ -65,7 +88,7 @@ namespace QuestionsOfRuneterra.Controllers
             {
                 if (type == RedactionType.Add)
                 {
-                    answerService.Add(answer.Content, answer.IsRight, answer.QuestionId, User.Id());
+                    answer.Id = answerService.Add(answer.Content, answer.IsRight, answer.QuestionId, User.Id());
                 }
                 else if (type == RedactionType.Edit)
                 {
@@ -93,13 +116,6 @@ namespace QuestionsOfRuneterra.Controllers
             }
 
             return query;
-        }
-
-        private int OrderNumber()
-        {
-            var orderNumber = int.Parse(TempData["orderNumber"].ToString());
-            TempData.Keep("orderNumber");
-            return orderNumber;
         }
 
     }

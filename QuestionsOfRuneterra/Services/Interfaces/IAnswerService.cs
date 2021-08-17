@@ -13,6 +13,11 @@ namespace QuestionsOfRuneterra.Services.Interfaces
         AnswerServiceModel NextAnswer(string questionId, int orderNumber);
 
         bool isAnswerToQuestion(string answerId, string questionId);
+
         int TotalAnswersToQuestion(string questionId);
+
+        bool isOwnedBy(string answerId, string userId);
+
+        bool Delete(string answerId);
     }
 }

@@ -19,5 +19,17 @@ namespace QuestionsOfRuneterra.Controllers
             TempData["orderNumber"] = int.Parse(TempData["orderNumber"].ToString()) - 1;
             TempData.Keep("orderNumber");
         }
+
+        protected void SetOrderNumber()
+        {
+            TempData["orderNumber"] = 0;
+            TempData.Keep("orderNumber");
+        }
+        protected int OrderNumber()
+        {
+            var orderNumber = int.Parse(TempData["orderNumber"].ToString());
+            TempData.Keep("orderNumber");
+            return orderNumber;
+        }
     }
 }

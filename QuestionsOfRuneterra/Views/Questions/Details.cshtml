@@ -1,0 +1,35 @@
+﻿@model QuestionServiceModel
+@inject IQuestionService questionService
+@{
+    ViewBag.Title = "Question's details";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Answer</th>
+            <th scope="col">Is True</th>
+            @if (questionService.isOwnedBy(Model.Id, User.Id()))
+            {
+                <th scope="col"></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{var number = 1;}
+        @foreach (var answer in Model.Answers)
+        {
+        <tr>
+            <th scope="row">@number</th>
+            <td>@answer.Content</td>
+            <td>@answer.IsRight</td>
+            @if (questionService.isOwnedBy(Model.Id, User.Id()))
+            {
+                <td><a class="btn btn-danger" asp-action="@nameof(AnswersController.Delete)" asp-controller="Answers" asp-route-id="@answer.Id" asp-route-questionId="@answer.QuestionId"></a>Delete</td>
+            }
+        </tr>
+            number++;
+        }
+    </tbody>
+</table>

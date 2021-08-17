@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuestionsOfRuneterra.Models.Questions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,5 +15,15 @@ namespace QuestionsOfRuneterra.Services.Interfaces
         bool Edit(string questionId, string content);
 
         bool Save(string questionId);
+
+        int RightAnswersCount(string questionId);
+
+        int WrongAnswersCount(string questionId);
+
+        QuestionServiceModel Question(string questionId);
+
+        bool Delete(string questionId);
+
+        bool DeleteUnfeatured(string userId);
     }
 }

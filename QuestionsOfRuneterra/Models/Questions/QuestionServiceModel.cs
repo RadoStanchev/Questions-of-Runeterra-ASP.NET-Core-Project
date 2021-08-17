@@ -9,7 +9,7 @@ using static QuestionsOfRuneterra.Data.DataConstants.Question;
 
 namespace QuestionsOfRuneterra.Models.Questions
 {
-    public class QuestionFormModel
+    public class QuestionServiceModel
     {
         public string Id { get; set; }
 
