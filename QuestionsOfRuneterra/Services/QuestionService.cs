@@ -12,14 +12,17 @@ namespace QuestionsOfRuneterra.Services
 {
     public class QuestionService : IQuestionService
     {
+        private readonly Random rnd;
+
         private readonly ApplicationDbContext data;
 
         private readonly IAnswerService answerService;
 
-        public QuestionService(ApplicationDbContext data, IAnswerService answerService = null)
+        public QuestionService(ApplicationDbContext data, IAnswerService answerService, Random rnd)
         {
             this.data = data;
             this.answerService = answerService;
+            this.rnd = rnd;
         }
 
         public string Add(string content, string creatorId)
@@ -72,7 +75,7 @@ namespace QuestionsOfRuneterra.Services
             return true;
         }
 
-        public bool isOwnedBy(string questionId, string userId)
+        public bool IsOwnedBy(string questionId, string userId)
         {
             return data.Questions.FirstOrDefault(q => q.Id == questionId).CreatorId == userId;
         }
@@ -133,6 +136,23 @@ namespace QuestionsOfRuneterra.Services
             }
 
             return true;
+        }
+
+        public QuizGameSessionQuestionServiceModel RandomQuestion(IList<string> usedQuestionIds)
+        {
+            var question = data.Questions.Where(q => usedQuestionIds.Contains(q.Id) == false).ToArray()[rnd.Next(data.Questions.Count())];
+
+            return new QuizGameSessionQuestionServiceModel
+            {
+                Content = question.Content,
+                Id = question.Id,
+                Answers = answerService.SetAnswers(question.Id),
+            };
+        }
+
+        public bool IsAnswerRightToQuestion(string answerId, string questionId)
+        {
+            return answerService.IsAnswerToQuestion(answerId, questionId) && answerService.IsRight(answerId);
         }
     }
 }

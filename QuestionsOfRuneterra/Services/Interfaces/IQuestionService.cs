@@ -10,7 +10,7 @@ namespace QuestionsOfRuneterra.Services.Interfaces
     {
         string Add(string content, string creatorId);
 
-        bool isOwnedBy(string questionId, string userId);
+        bool IsOwnedBy(string questionId, string userId);
 
         bool Edit(string questionId, string content);
 
@@ -25,5 +25,9 @@ namespace QuestionsOfRuneterra.Services.Interfaces
         bool Delete(string questionId);
 
         bool DeleteUnfeatured(string userId);
+
+        QuizGameSessionQuestionServiceModel RandomQuestion(IList<string> usedQuestionIds);
+
+        bool IsAnswerRightToQuestion(string answerId, string questionId);
     }
 }

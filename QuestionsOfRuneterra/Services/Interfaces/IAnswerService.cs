@@ -1,4 +1,5 @@
 ﻿using QuestionsOfRuneterra.Models.Answers;
+using System.Collections.Generic;
 
 namespace QuestionsOfRuneterra.Services.Interfaces
 {
@@ -12,12 +13,16 @@ namespace QuestionsOfRuneterra.Services.Interfaces
 
         AnswerServiceModel NextAnswer(string questionId, int orderNumber);
 
-        bool isAnswerToQuestion(string answerId, string questionId);
+        bool IsAnswerToQuestion(string answerId, string questionId);
 
         int TotalAnswersToQuestion(string questionId);
 
-        bool isOwnedBy(string answerId, string userId);
+        bool IsOwnedBy(string answerId, string userId);
 
         bool Delete(string answerId);
+
+        bool IsRight(string answerId);
+
+        IEnumerable<QuizGameSessionAnswerServiceModel> SetAnswers(string questionId);
     }
 }
