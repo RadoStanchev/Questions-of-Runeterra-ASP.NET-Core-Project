@@ -61,7 +61,7 @@ namespace QuestionsOfRuneterra.Controllers
             return View(questionService.Question(id));
         }
 
-        public IActionResult Save([FromQuery] QuestionServiceModel question)
+        public IActionResult Save(QuestionServiceModel question)
         {
             if(questionService.IsOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
             {
