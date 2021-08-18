@@ -63,7 +63,7 @@ namespace QuestionsOfRuneterra.Controllers
 
         public IActionResult Save([FromQuery] QuestionServiceModel question)
         {
-            if(questionService.isOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
+            if(questionService.IsOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }
@@ -86,7 +86,7 @@ namespace QuestionsOfRuneterra.Controllers
         [HttpPost]
         public IActionResult Edit([FromForm] QuestionServiceModel question)
         {
-            if (questionService.isOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
+            if (questionService.IsOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }
