@@ -1,0 +1,25 @@
+﻿@model QuizGameServiceModel
+<div class="mb-5"></div>
+<div class="container offset-1 col-10">
+    <div class="row">
+        <div class="col">
+            <label> Player's name:</label>
+        </div>
+        <div class="col">
+            <label> @Model.PlayerName </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label> Player's score:</label>
+        </div>
+        <div class="col">
+            <label> @Model.Points </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <a asp-action="@nameof(QuizGamesController.History)" asp-controller="QuizGames"></a>
+        </div>
+    </div>
+</div>

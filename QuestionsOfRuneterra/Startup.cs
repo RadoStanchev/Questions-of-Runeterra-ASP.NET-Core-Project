@@ -62,6 +62,9 @@ namespace QuestionsOfRuneterra
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswerService, AnswerService>();
             services.AddTransient<IFriendshipService, FriendshipService>();
+            services.AddTransient<IQuizGameService, QuizGameService>();
+            services.AddTransient<IQuizGameSessionService, QuizGameSessionService>();
+            services.AddTransient<ILeaderBoardService, LeaderBoardService>();
 
             services.AddControllersWithViews(options =>
             {

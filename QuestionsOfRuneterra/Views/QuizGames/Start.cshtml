@@ -9,19 +9,19 @@
                 <div class="border">
                     <div class="question bg-white p-3 border-bottom">
                         <div class="d-flex flex-row justify-content-between align-items-center mcq">
-                            <h4>ViewBag.Title</h4><span></span>
+                            <h4>@ViewBag.Title</h4><span></span>
                         </div>
                     </div>
                     <div class="question bg-white p-3 border-bottom">
                         <div class="d-flex flex-row align-items-center question-title">
-                            <h3 class="text-danger">Q. (number)</h3>
+                            <h3 class="text-danger">Q. @Model.OrderNumber</h3>
                             <h5 class="mt-1 ml-2">@Model.Question.Content</h5>
                         </div>
-                        @foreach (var answer in Model.Answers)
+                        @foreach (var answer in Model.Question.Answers)
                         {
                             <div class="ans ml-2">
                                 <label>
-                                    <input asp-for="Answers" type="radio" name="radioGroup" value="@answer.Id" /> <label asp-for="Answers">@answer.Content</label>
+                                    <input asp-for="Question.Answers" type="radio" name="AnswerId" value="@answer.Id" /> <label asp-for="Question.Answers">@answer.Content</label>
                                 </label>
                             </div>
                         }

@@ -1,0 +1,75 @@
+﻿@model QuizGameQueryModel
+@{
+    ViewBag.Title = "My Games";
+}
+
+<h4>@ViewBag.Title</h4>
+
+<form method="get" id="form">
+    <div class="row">
+        <div class="form-group col-6">
+            <div class="form-group">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control" id="select">
+                    <option value="0" selected>Started On</option>
+                    <option value="1">Finished On</option>
+                    <option value="2">Points</option>
+                </select>
+            </div>
+            <button type="submit" hidden></button>
+        </div>
+    </div>
+</form>
+
+@{
+    var ezrealBackgroundPath = $"{imagesPath}{backgroundsPath}\\ezreal-background.jpg".Replace("\\", "/");
+
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalGames / QuizGameQueryModel.GamesPerPage);
+
+    var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Games.Any();
+}
+
+@if (!Model.Games.Any())
+{
+    <h2 class="text-center">No Games have been played!</h2>
+}
+
+@foreach (var game in Model.Games)
+{
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-overlay" src="@ezrealBackgroundPath" alt="">
+        <div class="card-body">
+            <p class="card-text"></p>
+        </div>
+    </div>
+}
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="QuizGames"
+           asp-action="@nameof(QuizGamesController.History)"
+           asp-route-currentPage="@previousPage"
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
+    </div>
+    <div class="col-md-6">
+        <a class="btn btn-primary float-sm-right @(shouldButtonBeDisabled ? "disabled" : string.Empty)" style="margin-top: 10px"
+           asp-controller="QuizGames"
+           asp-action="@nameof(QuizGamesController.History)"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('select').addEventListener('change', (e) => {
+        e.preventDefault();
+        document.getElementById("form").submit();
+    })
+</script>

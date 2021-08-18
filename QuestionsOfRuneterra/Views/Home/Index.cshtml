@@ -48,17 +48,17 @@
         <div class="col-md-4">
             <h2>QuizGame</h2>
             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+            <p><a class="btn btn-secondary" asp-action="@nameof(QuizGamesController.History)" asp-controller="QuizGames" role="button">My Games »</a></p>
         </div>
         <div class="col-md-4">
             <h2>LeaderBoard</h2>
             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+            <p><a class="btn btn-secondary" asp-action="@nameof(LeaderBoardController.All)" asp-controller="Leaderboard" role="button">View Top Players »</a></p>
         </div>
         <div class="col-md-4">
-            <h2>Chat Groups</h2>
+            <h2>Questions</h2>
             <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+            <p><a class="btn btn-secondary" asp-action="@nameof(QuestionsController.Add)" asp-controller="Questions" role="button">Add Some »</a></p>
         </div>
     </div>
 

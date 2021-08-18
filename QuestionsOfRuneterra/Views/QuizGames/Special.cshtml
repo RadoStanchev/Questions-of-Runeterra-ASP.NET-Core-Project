@@ -1,0 +1,11 @@
+﻿@model QuizGameServiceModel
+@{
+    ViewBag.Title = "Game Over";
+}
+
+<h4>@ViewBag.Title</h4>
+<div>
+    <label>Congrats you beat <span class="font-weight-bold">All the Questions </span></label>
+</div>
+
+<partial name="_QuizGameDetails" model="@Model" />
