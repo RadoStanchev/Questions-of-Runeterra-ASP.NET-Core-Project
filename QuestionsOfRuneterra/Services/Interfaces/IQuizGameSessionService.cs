@@ -11,5 +11,7 @@ namespace QuestionsOfRuneterra.Services.Interfaces
         QuizGameSessionServiceModel Make(string quizGameId);
 
         bool CanContinue(string answerId, string questionId);
+
+        bool AddAnswer(string sessionId, string answerId);
     }
 }

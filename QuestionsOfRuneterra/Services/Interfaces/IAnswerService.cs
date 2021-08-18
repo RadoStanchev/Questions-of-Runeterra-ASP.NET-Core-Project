@@ -23,6 +23,8 @@ namespace QuestionsOfRuneterra.Services.Interfaces
 
         bool IsRight(string answerId);
 
+        bool Exists(string answerId);
+
         IEnumerable<QuizGameSessionAnswerServiceModel> SetAnswers(string questionId);
     }
 }

@@ -8,6 +8,6 @@ namespace QuestionsOfRuneterra.Services.Interfaces
 {
     public interface ILeaderBoardService
     {
-        IEnumerable<LeaderBoardUserServiceModel> Leaders();
+        IEnumerable<LeaderBoardUserServiceModel> Players (string searchTerm, int currentPage, int playersPerPage);
     }
 }

@@ -17,9 +17,25 @@ namespace QuestionsOfRuneterra.Services
             this.data = data;
         }
 
-        public IEnumerable<LeaderBoardUserServiceModel> Leaders()
+        public IEnumerable<LeaderBoardUserServiceModel> Players(string searchTerm = null, int currentPage = 1, int playersPerPage = int.MaxValue)
         {
-            throw new NotImplementedException();
+            var players = data.ApplicationUsers.OrderByDescending(p => p.QuizGames.Sum(qg => qg.Points)).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                players = players.Where(p =>
+                    (p.FirstName + " " + p.LastName).ToLower().Contains(searchTerm.ToLower()) ||
+                    p.UserName.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            return players.Select(p => new LeaderBoardUserServiceModel
+            {
+                Id = p.Id,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                Points = p.QuizGames.Sum(qg => qg.Points),
+                ProfileImagePath = p.ProfileImagePath,
+                UserName = p.UserName
+            }).ToList();
         }
     }
 }

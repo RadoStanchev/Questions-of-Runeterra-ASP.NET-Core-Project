@@ -21,6 +21,21 @@ namespace QuestionsOfRuneterra.Services
             this.data = data;
         }
 
+        public bool AddAnswer(string sessionId, string answerId)
+        {
+            var session = data.QuizGameSessions.FirstOrDefault(qgs => qgs.Id == sessionId);
+
+            if (session == null)
+            {
+                return false;
+            }
+
+            session.SelectedAnswerId = answerId;
+            data.SaveChanges();
+
+            return true;
+        }
+
         public bool CanContinue(string answerId , string questionId)
         {
             return questionService.IsAnswerRightToQuestion(answerId, questionId);

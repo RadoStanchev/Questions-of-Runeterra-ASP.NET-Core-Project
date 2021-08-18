@@ -74,6 +74,11 @@ namespace QuestionsOfRuneterra.Services
             return true;
         }
 
+        public bool Exists(string answerId)
+        {
+            return data.Answers.Any(a => a.Id == answerId);
+        }
+
         public bool IsAnswerToQuestion(string answerId, string questionId)
         {
             return data.Answers.FirstOrDefault(a => a.Id == answerId).QuestionId == questionId;

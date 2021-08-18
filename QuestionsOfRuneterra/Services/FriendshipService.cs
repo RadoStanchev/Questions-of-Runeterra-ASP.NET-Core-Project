@@ -19,7 +19,7 @@ namespace QuestionsOfRuneterra.Services
 
         private readonly IRoomService roomService;
 
-        public FriendshipService(ApplicationDbContext data, IMapper mapper, ApplicationUserService applicationUserService, IRoomService roomService)
+        public FriendshipService(ApplicationDbContext data, IMapper mapper, IApplicationUserService applicationUserService, IRoomService roomService)
         {
             this.data = data;
             this.mapper = mapper.ConfigurationProvider;
