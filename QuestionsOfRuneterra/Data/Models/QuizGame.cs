@@ -11,10 +11,9 @@ namespace QuestionsOfRuneterra.Data.Models
         [Required]
         public IEnumerable<QuizGameSession> Sessions { get; set; }
 
-        [Required]
         public DateTime StartedOn { get; set; }
 
-        public DateTime FinishedOn { get; set; }
+        public DateTime? FinishedOn { get; set; }
 
         [Required]
         public string PlayerId { get; set; }

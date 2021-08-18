@@ -23,6 +23,9 @@ namespace QuestionsOfRuneterra.Data.Models
         public IEnumerable<Room> OwnedRooms { get; set; }
 
         [Required]
+        public IEnumerable<QuizGame> QuizGames { get; set; }
+
+        [Required]
         public IEnumerable<Room> JoinedRooms { get; set; }
 
         [Required]
