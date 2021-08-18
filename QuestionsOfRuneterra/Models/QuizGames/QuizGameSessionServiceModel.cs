@@ -6,7 +6,7 @@ namespace QuestionsOfRuneterra.Models.QuizGames
 {
     public class QuizGameSessionServiceModel
     {
-        public string OrderNumber { get; set; }
+        public int OrderNumber { get; set; }
 
         public string Id { get; set; }
 
