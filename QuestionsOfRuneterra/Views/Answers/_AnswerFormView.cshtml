@@ -1,14 +1,17 @@
 ﻿@model AnswerQueryModel
 @{
-    var orderNumber = int.Parse(TempData["orderNumber"].ToString());
-    TempData.Keep("orderNumber");
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
 }
 
 <h4 class="text-center">@ViewBag.Title</h4>
 <form class="offset-1 col-10" id="form" method="post">
     <div class="form-row">
         <div class="form-group text-center">
-            <label class="form-control">Current Answer @(orderNumber+1)</label>
+            <label class="form-control">Current Answer @Model.CurrentPage</label>
         </div>
         <div class="form-group text-center">
             <label class="form-control">Total Answers @Model.TotalAnswers</label>
@@ -25,6 +28,7 @@
     <div class="form-row">
         <div class="form-group col-md-5">
             <input asp-for="@Model.CurrentAnswer.Content" name="Content" type="text" class="form-control answerInput" placeholder="Write your Answer here">
+            <span asp-validation-for="@Model.CurrentAnswer.Content"></span>
         </div>
         <div class="form-group offset-1 col-md-2">
             <label>
@@ -36,34 +40,49 @@
     </div>
     <div class="form-row">
         <div class="form-group d-flex flex-row justify-content-between align-items-center p-3 bg-white">
-            <a asp-action="@nameof(AnswersController.Edit)"
-               asp-controller="Answers"
-               asp-route-questionId="@Model.QuestionId"
-               asp-route-IncreaseOrderNumber ="false"
-               class="btn btn-primary d-flex align-items-center btn-danger form-control @(Model.PreviousAnswer == null ? "disabled" : string.Empty)">
+            <button id="prev" type="submit" class="btn btn-primary d-flex align-items-center btn-danger form-control"
+                    asp-action="@nameof(AnswersController.Edit)"
+                    asp-controller="Answers"
+                    asp-route-questionId="@Model.QuestionId"
+                    asp-route-currentPage="@(Model.CurrentPage)"
+                    asp-route-IncreaseCurrentPage="false"
+                    asp-route-TotalAnswers="@Model.TotalAnswers">
                 <span class="carousel-control-prev-icon"></span>
                 Previous Answer
-            </a>
-            <a class="form-control" asp-action="@nameof(QuestionsController.Edit)" asp-controller="Questions" asp-route-Id="@Model.QuestionId">
+            </button>
+            <a class="form-control" asp-action="@nameof(QuestionsController.Edit)" asp-controller="Questions" asp-route-QuestionId="@Model.QuestionId" asp-route-currentPage="@(Model.CurrentPage)">
                 Edit the Question
             </a>
 
-            <a class="form-control" asp-action="@nameof(QuestionsController.Save)" asp-controller="Questions" asp-route-Id="@Model.QuestionId">
+            <a class="form-control" asp-action="@nameof(QuestionsController.Save)" asp-controller="Questions" asp-route-QuestionId="@(Model.QuestionId)" asp-route-currentPage="@(Model.CurrentPage)">
                 Save Question
             </a>
 
 
-            <button asp-route-IncreaseOrderNumber ="true" type="submit" class="btn btn-primary d-flex align-items-center btn-success form-control">
-                @if (@Model.TotalAnswers == orderNumber)
+            <button type="submit" class="btn btn-primary d-flex align-items-center btn-success form-control"
+                    asp-action="@(Model.CurrentPage - 1 == Model.TotalAnswers ? nameof(AnswersController.Add) : nameof(AnswersController.Edit))"
+                    asp-controller="Answers"
+                    asp-route-questionId="@Model.QuestionId"
+                    asp-route-currentPage="@(Model.CurrentPage)"
+                    asp-route-IncreaseCurrentPage="true"
+                    asp-route-TotalAnswers="@Model.TotalAnswers">
+                @if (Model.CurrentPage - 1 == Model.TotalAnswers)
                 {
-                    <span>Add some more Answers</span>
+                    <span>Add Answer</span>
                 }
                 else
                 {
-                    <span>Edit Next Answer</span>
+                    <span>Edit Answer</span>
                 }
                 <span class="carousel-control-next-icon"></span>
             </button>
         </div>
     </div>
 </form>
+
+@if (Model.CurrentPage == 1)
+{
+    <script>
+        document.getElementById("prev").disabled = true;
+    </script>
+}

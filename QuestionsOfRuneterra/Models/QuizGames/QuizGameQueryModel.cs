@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using QuestionsOfRuneterra.Services.Enums;
-using System;
+﻿using QuestionsOfRuneterra.Services.QuizGame;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QuestionsOfRuneterra.Models.QuizGames
 {

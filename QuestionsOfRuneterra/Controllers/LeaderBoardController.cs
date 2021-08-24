@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuestionsOfRuneterra.Models.LeaderBoard;
-using QuestionsOfRuneterra.Services.Interfaces;
+using QuestionsOfRuneterra.Services.LeaderBoard;
 using System.Linq;
 
 namespace QuestionsOfRuneterra.Controllers

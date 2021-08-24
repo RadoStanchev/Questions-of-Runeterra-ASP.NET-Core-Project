@@ -1,15 +1,14 @@
 ﻿using CarRentingSystem.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuestionsOfRuneterra.Infrastructure.Extensions;
 using QuestionsOfRuneterra.Models.Answers;
 using QuestionsOfRuneterra.Models.Questions;
-using QuestionsOfRuneterra.Services.Interfaces;
+using QuestionsOfRuneterra.Services.Answers;
 using static QuestionsOfRuneterra.WebConstants;
 
 namespace QuestionsOfRuneterra.Controllers
 {
-    public class AnswersController : MyController
+    public class AnswersController : Controller
     {
         private IAnswerService answerService;
 
@@ -20,40 +19,77 @@ namespace QuestionsOfRuneterra.Controllers
 
         public IActionResult Add([FromQuery] AnswerQueryModel query)
         {
-            query.TotalAnswers = answerService.TotalAnswersToQuestion(query.QuestionId);
             return View(query);
         }
 
         [HttpPost]
-        public IActionResult Add([FromForm] AnswerServiceModel answer, [FromQuery] bool increaseOrderNumber)
+        public IActionResult Add([FromQuery] AnswerQueryModel query, [FromForm] AnswerServiceModel answer, bool increaseCurrentPage)
         {
-            return this.View(Redaction(answer, RedactionType.Add, increaseOrderNumber));
+            if (query.CurrentPage - 1 < query.TotalAnswers)
+            {
+                return Edit(query, answer, increaseCurrentPage);
+            }
+
+            if (!TryValidateModel(answer))
+            {
+                if(increaseCurrentPage == false)
+                {
+                    query.CurrentPage -= 1;
+
+                    return RedirectToAction(nameof(AnswersController.Edit), query);
+                }
+
+                return View(query);
+            }
+
+            answerService.Add(answer.Content, answer.IsRight, answer.QuestionId, User.Id());
+
+            query.CurrentPage = increaseCurrentPage == true ?
+                query.CurrentPage + 1 : query.CurrentPage - 1;
+            query.TotalAnswers = answerService.TotalAnswersToQuestion(query.QuestionId);
+
+            if (query.CurrentPage - 1 < query.TotalAnswers)
+            {
+                query.CurrentAnswer = answerService.Answer(query.QuestionId, query.CurrentPage);
+                return RedirectToAction(nameof(AnswersController.Edit), query);
+            }
+
+            return View(query);
         }
 
-        public IActionResult Edit([FromQuery] AnswerQueryModel query)
+        public IActionResult Edit(AnswerQueryModel query)
         {
-            if (OrderNumber() == answerService.TotalAnswersToQuestion(query.QuestionId))
+            query.CurrentAnswer = answerService.Answer(query.QuestionId, query.CurrentPage);
+            return View(query);
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromQuery] AnswerQueryModel query, [FromForm] AnswerServiceModel answer, bool increaseCurrentPage)
+        {
+            if (query.CurrentPage - 1 >= query.TotalAnswers)
+            {
+                return Add(query, answer, increaseCurrentPage);
+            }
+
+            if (!TryValidateModel(answer))
+            {
+                return View(query);
+            }
+
+            answerService.Edit(answer.Id,answer.Content, answer.IsRight);
+
+            query.CurrentPage = increaseCurrentPage == true ?
+                query.CurrentPage + 1 : query.CurrentPage - 1;
+            query.TotalAnswers = answerService.TotalAnswersToQuestion(query.QuestionId);
+
+            if (query.CurrentPage - 1 >= query.TotalAnswers)
             {
                 return RedirectToAction(nameof(AnswersController.Add), query);
             }
 
-            DecreaseOrderNumber();
-            query.CurrentAnswer = answerService.PreviousAnswer(query.QuestionId, OrderNumber());
-            query.PreviousAnswer = OrderNumber()-1 < 0 ? null : answerService.PreviousAnswer(query.QuestionId, OrderNumber()-1);
-            query.TotalAnswers = answerService.TotalAnswersToQuestion(query.QuestionId);
+            query.CurrentAnswer = answerService.Answer(query.QuestionId, query.CurrentPage);
+
             return View(query);
-        }
-
-        [HttpPost]
-        public IActionResult Edit([FromForm] AnswerServiceModel answer, [FromQuery] bool increaseOrderNumber)
-        {
-            var query = Redaction(answer, RedactionType.Edit, increaseOrderNumber);
-            if (OrderNumber() == answerService.TotalAnswersToQuestion(answer.QuestionId))
-            {
-                this.RedirectToAction(nameof(AnswersController.Add), query);
-            }
-
-            return this.View(query);
         }
 
         public IActionResult Delete([FromQuery] AnswerServiceModel answer)
@@ -66,58 +102,10 @@ namespace QuestionsOfRuneterra.Controllers
 
             var query = new QuestionServiceModel
             {
-                Id = answer.QuestionId
+                QuestionId = answer.QuestionId
             };
 
             return this.RedirectToAction(nameof(QuestionsController.Details), typeof(QuestionsController).GetControllerName(), query);
         }
-
-        private AnswerQueryModel Redaction(AnswerServiceModel answer, RedactionType type, bool increaseOrderNumber)
-        {
-            AnswerQueryModel query;
-            if (!ModelState.IsValid)
-            {
-                query = new AnswerQueryModel
-                {
-                    PreviousAnswer = OrderNumber() == 0 ? null : answerService.PreviousAnswer(answer.QuestionId, OrderNumber()),
-                    CurrentAnswer = answer,
-                    QuestionId = answer.QuestionId,
-                    TotalAnswers = answerService.TotalAnswersToQuestion(answer.QuestionId)
-                };
-            }
-            else
-            {
-                if (type == RedactionType.Add)
-                {
-                    answer.Id = answerService.Add(answer.Content, answer.IsRight, answer.QuestionId, User.Id());
-                }
-                else if (type == RedactionType.Edit)
-                {
-                    answerService.Edit(answer.Id, answer.Content, answer.IsRight);
-                }
-
-                query = new AnswerQueryModel
-                {
-                    PreviousAnswer = answer,
-                    QuestionId = answer.QuestionId,
-                    TotalAnswers = answerService.TotalAnswersToQuestion(answer.QuestionId)
-                };
-
-                if (increaseOrderNumber == true)
-                {
-                    IncreaseOrderNumber();
-                    query.CurrentAnswer = OrderNumber() == answerService.TotalAnswersToQuestion(answer.QuestionId) ? null : answerService.PreviousAnswer(answer.QuestionId, OrderNumber());
-                }
-                else
-                {
-                    DecreaseOrderNumber();
-                    query.CurrentAnswer = OrderNumber() == answerService.TotalAnswersToQuestion(answer.QuestionId) ? null : answerService.NextAnswer(answer.QuestionId, OrderNumber());
-                }
-               
-            }
-
-            return query;
-        }
-
     }
 }

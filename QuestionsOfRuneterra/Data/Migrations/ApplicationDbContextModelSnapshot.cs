@@ -278,6 +278,30 @@ namespace QuestionsOfRuneterra.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.FriendRequest", b =>
+                {
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SendOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SenderId", "ReceiverId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("FriendRequests");
+                });
+
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.Friendship", b =>
                 {
                     b.Property<string>("FirstFriendId")
@@ -309,8 +333,8 @@ namespace QuestionsOfRuneterra.Data.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(32767)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -319,10 +343,7 @@ namespace QuestionsOfRuneterra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ToRoomId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ToRoomId1")
+                    b.Property<string>("ToRoomId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -330,7 +351,7 @@ namespace QuestionsOfRuneterra.Data.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.HasIndex("ToRoomId1");
+                    b.HasIndex("ToRoomId");
 
                     b.ToTable("Messages");
                 });
@@ -528,6 +549,13 @@ namespace QuestionsOfRuneterra.Data.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.FriendRequest", b =>
+                {
+                    b.HasOne("QuestionsOfRuneterra.Data.Models.ApplicationUser", null)
+                        .WithMany("FriendRequests")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.Friendship", b =>
                 {
                     b.HasOne("QuestionsOfRuneterra.Data.Models.ApplicationUser", null)
@@ -553,7 +581,7 @@ namespace QuestionsOfRuneterra.Data.Migrations
 
                     b.HasOne("QuestionsOfRuneterra.Data.Models.Room", "ToRoom")
                         .WithMany("Messages")
-                        .HasForeignKey("ToRoomId1")
+                        .HasForeignKey("ToRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -576,7 +604,7 @@ namespace QuestionsOfRuneterra.Data.Migrations
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.QuizGame", b =>
                 {
                     b.HasOne("QuestionsOfRuneterra.Data.Models.ApplicationUser", "Player")
-                        .WithMany()
+                        .WithMany("QuizGames")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -620,11 +648,15 @@ namespace QuestionsOfRuneterra.Data.Migrations
 
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("FriendRequests");
+
                     b.Navigation("Friendships");
 
                     b.Navigation("Messages");
 
                     b.Navigation("OwnedRooms");
+
+                    b.Navigation("QuizGames");
                 });
 
             modelBuilder.Entity("QuestionsOfRuneterra.Data.Models.Question", b =>

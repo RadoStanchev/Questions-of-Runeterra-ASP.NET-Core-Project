@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QuestionsOfRuneterra.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuestionsOfRuneterra.Controllers
 {
+    [Authorize]
     public class FriendshipsController : Controller
     {
         public IActionResult All()
@@ -14,7 +16,12 @@ namespace QuestionsOfRuneterra.Controllers
             return View();
         }
 
-        public IActionResult Profile()
+        public IActionResult Suggestions()
+        {
+            return View();
+        }
+
+        public IActionResult MyFriends()
         {
             return View();
         }

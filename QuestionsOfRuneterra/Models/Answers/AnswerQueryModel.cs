@@ -6,12 +6,10 @@ namespace QuestionsOfRuneterra.Models.Answers
     {
         public AnswerServiceModel CurrentAnswer { get; set; }
 
-        public AnswerServiceModel PreviousAnswer { get; set; }
-
         public string QuestionId { get; set; }
 
         public int TotalAnswers { get; set; }
 
-        public bool IncreaseOrderNumber { get; set; }
+        public int CurrentPage { get; set; } = 1;
     }
 }
