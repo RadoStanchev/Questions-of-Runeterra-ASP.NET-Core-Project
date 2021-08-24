@@ -33,5 +33,8 @@ namespace QuestionsOfRuneterra.Data.Models
 
         [Required]
         public IEnumerable<Friendship> Friendships { get; set; }
+
+        [Required]
+        public IEnumerable<FriendRequest> FriendRequests { get; set; }
     }
 }

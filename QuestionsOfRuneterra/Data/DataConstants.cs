@@ -24,7 +24,7 @@
         public class Message
         {
             public const int ContentMinLength = 5;
-            public const int ContentMaxLength = 300;
+            public const int ContentMaxLength = 32767;
         }
 
         public class Question

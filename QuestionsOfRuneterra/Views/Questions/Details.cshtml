@@ -10,7 +10,7 @@
             <th scope="col">#</th>
             <th scope="col">Answer</th>
             <th scope="col">Is True</th>
-            @if (questionService.IsOwnedBy(Model.Id, User.Id()))
+            @if (questionService.IsOwnedBy(Model.QuestionId, User.Id()))
             {
                 <th scope="col"></th>
             }
@@ -24,7 +24,7 @@
             <th scope="row">@number</th>
             <td>@answer.Content</td>
             <td>@answer.IsRight</td>
-            @if (questionService.IsOwnedBy(Model.Id, User.Id()))
+            @if (questionService.IsOwnedBy(Model.QuestionId, User.Id()))
             {
                 <td><a class="btn btn-danger" asp-action="@nameof(AnswersController.Delete)" asp-controller="Answers" asp-route-id="@answer.Id" asp-route-questionId="@answer.QuestionId"></a>Delete</td>
             }

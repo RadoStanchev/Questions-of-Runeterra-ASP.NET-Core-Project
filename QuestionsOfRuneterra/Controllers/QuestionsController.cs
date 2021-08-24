@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using QuestionsOfRuneterra.Infrastructure.Extensions;
 using QuestionsOfRuneterra.Models.Answers;
 using QuestionsOfRuneterra.Models.Questions;
-using QuestionsOfRuneterra.Services.Interfaces;
+using QuestionsOfRuneterra.Services.Questions;
 
 namespace QuestionsOfRuneterra.Controllers
 {
     [Authorize]
-    public class QuestionsController : MyController
+    public class QuestionsController : Controller
     {
         private readonly IQuestionService questionService;
 
@@ -41,14 +41,13 @@ namespace QuestionsOfRuneterra.Controllers
                 QuestionId = questionService.Add(question.Content, User.Id())
             };
 
-            SetOrderNumber();
             return RedirectToAction(nameof(AnswersController.Add), typeof(AnswersController).GetControllerName(),answerQuery);
         }
 
 
         public IActionResult Details([FromQuery] QuestionServiceModel question)
         {
-            if (questionService.IsOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
+            if (questionService.IsOwnedBy(question.QuestionId, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }
@@ -56,48 +55,52 @@ namespace QuestionsOfRuneterra.Controllers
             return View(question);
         }
 
-        public IActionResult Edit(string id)
+        public IActionResult Edit(string questionId, int currentPage)
         { 
-            return View(questionService.Question(id));
-        }
-
-        public IActionResult Save(QuestionServiceModel question)
-        {
-            if(questionService.IsOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
-            {
-                return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
-            }
-
-            if (questionService.WrongAnswersCount(question.Id) < 3)
-            {
-                ModelState.AddModelError(nameof(question.Answers), "Wrong answers must be at least 3");
-            }
-
-            if (questionService.RightAnswersCount(question.Id) < 1)
-            {
-                ModelState.AddModelError(nameof(question.Answers), "Right answers must be at least 1");
-            }
-
-            questionService.Save(question.Id);
-
-            return RedirectToAction(nameof(QuestionsController.Details));
+            var question = questionService.Question(questionId);
+            question.CurrentPage = currentPage;
+            return View(question);
         }
 
         [HttpPost]
         public IActionResult Edit([FromForm] QuestionServiceModel question)
         {
-            if (questionService.IsOwnedBy(question.Id, User.Id()) == false && User.IsAdmin() == false)
+            if (questionService.IsOwnedBy(question.QuestionId, User.Id()) == false && User.IsAdmin() == false)
             {
                 return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
             }
 
-            questionService.Edit(question.Id, User.Id());
+            questionService.Edit(question.QuestionId, question.Content);
             var answerQuery = new AnswerQueryModel
             {
-                QuestionId = question.Id
+                QuestionId = question.QuestionId
             };
 
             return RedirectToAction(nameof(AnswersController.Edit), typeof(AnswersController).GetControllerName(), answerQuery);
+        }
+
+        public IActionResult Save([FromQuery]QuestionServiceModel question)
+        {
+            if (questionService.IsOwnedBy(question.QuestionId, User.Id()) == false && User.IsAdmin() == false)
+            {
+                return RedirectToAction(nameof(HomeController.Index), typeof(HomeController).GetControllerName());
+            }
+
+            if (questionService.WrongAnswersCount(question.QuestionId) < 3)
+            {
+                ModelState.AddModelError(nameof(question.Answers), "Wrong answers must be at least 3");
+                return RedirectToAction(nameof(QuestionsController.Edit), question);
+            }
+
+            if (questionService.RightAnswersCount(question.QuestionId) < 1)
+            {
+                ModelState.AddModelError(nameof(question.Answers), "Right answers must be at least 1");
+                return RedirectToAction(nameof(QuestionsController.Edit), question);
+            }
+
+            questionService.Save(question.QuestionId);
+
+            return RedirectToAction(nameof(QuestionsController.Details));
         }
 
         public IActionResult Delete(string id)

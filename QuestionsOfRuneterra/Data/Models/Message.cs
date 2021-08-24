@@ -22,7 +22,7 @@ namespace QuestionsOfRuneterra.Data.Models
         public ApplicationUser Sender { get; set; }
 
         [Required]
-        public int ToRoomId { get; set; }
+        public string ToRoomId { get; set; }
 
         [Required]
         public Room ToRoom { get; set; }

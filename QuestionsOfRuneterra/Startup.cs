@@ -10,8 +10,14 @@ using Microsoft.Extensions.Hosting;
 using QuestionsOfRuneterra.Data;
 using QuestionsOfRuneterra.Data.Models;
 using QuestionsOfRuneterra.Infrastructure.Extensions;
-using QuestionsOfRuneterra.Services;
-using QuestionsOfRuneterra.Services.Interfaces;
+using QuestionsOfRuneterra.Services.Answers;
+using QuestionsOfRuneterra.Services.ApplicationUsers;
+using QuestionsOfRuneterra.Services.Friendships;
+using QuestionsOfRuneterra.Services.LeaderBoard;
+using QuestionsOfRuneterra.Services.Questions;
+using QuestionsOfRuneterra.Services.QuizGame;
+using QuestionsOfRuneterra.Services.QuizGameSessions;
+using QuestionsOfRuneterra.Services.Rooms;
 using System;
 using static QuestionsOfRuneterra.Data.DataConstants.ApplicationUser;
 
